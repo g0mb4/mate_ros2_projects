@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="js/eventemitter2.min.js"></script>
+    <script src="js/roslib.min.js"></script>
+
+    <script>
+        var ros = new ROSLIB.Ros();
+
+        ros.on('error', (error) => {
+            document.getElementById('status').innerText = 'Error: ' + error;
+            document.getElementById('status').style.color = "#ff0000";
+            document.getElementById('position').style.display = 'none';
+            document.getElementById('controls').style.display = 'none';
+            console.log(error);
+        });
+
+        ros.on('connection', () => {
+            document.getElementById('status').innerText = 'Connected.';
+            document.getElementById('status').style.color = "#00ff00";
+            document.getElementById('position').style.display = 'inline';
+            document.getElementById('controls').style.display = 'inline';
+            console.log('Connected.');
+        });
+
+        ros.on('close', () => {
+            document.getElementById('status').innerText = 'Connection closed.';
+            document.getElementById('status').style.color = "#000000";
+            document.getElementById('position').style.display = 'none';
+            document.getElementById('controls').style.display = 'none';
+            console.log('Connection closed.');
+        });
+
+        ros.connect('ws://localhost:9090');
+
+        var poseListener = new ROSLIB.Topic({
+            ros: ros,
+            name: '/turtle1/pose',
+            messageType: 'turtlesim/msg/Pose'
+        });
+
+        poseListener.subscribe((msg) => {
+            var px = document.getElementById("posX");
+            px.innerText = msg.x;
+
+            var py = document.getElementById("posY");
+            py.innerText = msg.y;
+        });
+
+        var cmdVel = new ROSLIB.Topic({
+            ros: ros,
+            name: '/turtle1/cmd_vel',
+            messageType: 'geometry_msgs/Twist'
+        });
+
+        document.addEventListener('keydown', (event) => {
+            var v_x = 0;
+            var v_th = 0;
+
+            if (event.key === 'w') {
+                v_x = 1;
+            }
+
+            if (event.key === 's') {
+                v_x = -1;
+            }
+
+            if (event.key === 'a') {
+                v_th = 1;
+            }
+
+            if (event.key === 'd') {
+                v_th = -1;
+            }
+
+            var twist = new ROSLIB.Message({
+                linear: {
+                    x: v_x,
+                    y: 0.0,
+                    z: 0.0
+                },
+                angular: {
+                    x: 0.0,
+                    y: 0.0,
+                    z: v_th
+                }
+            });
+            cmdVel.publish(twist);
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <p id="status">
+            Connecting to rosbridge...
+        </p>
+    </div>
+    <div id="position" style="display:none">
+        <table>
+            <tr>
+                <td>Position X=</td>
+                <td id="posX">--</td>
+            </tr>
+            <tr>
+                <td>Position Y=</td>
+                <td id="posY">--</td>
+            </tr>
+        </table>
+    </div>
+    <div id="controls" style="display:none">
+        <p>
+            Focus the page then use the controls:
+        </p>
+        <ul>
+            <li>Press <b>W</b> to go forward.</li>
+            <li>Press <b>S</b> to go backwards.</li>
+            <li>Press <b>A</b> to turn left.</li>
+            <li>Press <b>D</b> to turn right.</li>
+        </ul>
+    </div>
+</body>
+
+</html>
