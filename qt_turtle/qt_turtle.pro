@@ -22,4 +22,4 @@ FORMS += \
 DISTFILES += \
       package.xml \
       CMakeLists.txt \
-      launch/qt_turtle.launch.py
+      launch/start.launch.py
