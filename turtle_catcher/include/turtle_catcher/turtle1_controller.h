@@ -1,11 +1,11 @@
 #pragma once
 
-#include <rclcpp/rclcpp.hpp>
-#include <turtlesim/msg/pose.hpp>
 #include <geometry_msgs/msg/twist.hpp>
+#include <rclcpp/rclcpp.hpp>
 #include <turtle_catcher/srv/target_position.hpp>
+#include <turtlesim/msg/pose.hpp>
 
-class Turtle1Controller: public rclcpp::Node{
+class Turtle1Controller : public rclcpp::Node {
 public:
     Turtle1Controller();
 
@@ -14,7 +14,7 @@ private:
 
     void subscribe_pose(const turtlesim::msg::Pose::SharedPtr);
 
-    void serve_target_position( 
+    void serve_target_position(
         const turtle_catcher::srv::TargetPosition::Request::SharedPtr,
         const turtle_catcher::srv::TargetPosition::Response::SharedPtr);
 
@@ -24,8 +24,8 @@ private:
     rclcpp::TimerBase::SharedPtr m_control_loop_timer;
     rclcpp::Service<turtle_catcher::srv::TargetPosition>::SharedPtr m_target_position_server;
 
-    float m_target_x {0}, m_target_y {0};
+    float m_target_x { 0 }, m_target_y { 0 };
     float m_tolerance;
     float m_P_distance, m_P_angle;
-    bool m_running {false};
+    bool m_running { false };
 };
