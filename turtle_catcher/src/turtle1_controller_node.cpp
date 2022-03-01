@@ -4,8 +4,7 @@ int main(int argc, char** argv)
 {
     rclcpp::init(argc, argv);
 
-    auto node = std::make_shared<Turtle1Controller>();
-    rclcpp::spin(node);
+    rclcpp::spin(std::make_shared<Turtle1Controller>());
 
     rclcpp::shutdown();
     return 0;
