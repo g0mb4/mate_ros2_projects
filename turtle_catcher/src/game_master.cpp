@@ -1,61 +1,60 @@
 #include <turtle_catcher/game_master.h>
 
-GameMaster::GameMaster() : rclcpp::Node("game_master"), m_random_generator(std::random_device()())
+GameMaster::GameMaster()
+    : rclcpp::Node("game_master")
+    , m_random_generator(std::random_device()())
 {
     declare_parameter<float>("tolerance", 0.1);
     m_tolerance = (float)get_parameter("tolerance").as_double();
 
     m_pose_subscriber = create_subscription<turtlesim::msg::Pose>(
-                        "turtle1/pose", 10, 
-                        std::bind(&GameMaster::subscribe_pose,
-                        this, std::placeholders::_1));
+        "turtle1/pose", 10,
+        std::bind(&GameMaster::subscribe_pose,
+            this, std::placeholders::_1));
 
-    m_control_loop_timer = create_wall_timer(std::chrono::milliseconds(33), 
-                   std::bind(&GameMaster::control_loop_tick, this));
+    m_control_loop_timer = create_wall_timer(std::chrono::milliseconds(33),
+        std::bind(&GameMaster::control_loop_tick, this));
 
     RCLCPP_INFO(get_logger(), "started");
     reset_target();
 }
 
-void GameMaster::reset_target(){
+void GameMaster::reset_target()
+{
     auto thread = std::make_unique<std::thread>(
-        [this]{
-            bool ok = false;
-
-            while(ok == false){
-                kill_target_impl();
-                ok = spawn_target_impl();
-
-                if(ok){
-                    send_target_position_impl();
+        [this] {
+            while (1) {
+                if (kill_target_impl()) {
+                    break;
                 }
             }
-        }
-    );
+        });
 
     thread->detach();
 }
 
-void GameMaster::control_loop_tick(){
-    if(m_pose == nullptr){
+void GameMaster::control_loop_tick()
+{
+    if (m_pose == nullptr) {
         return;
     }
 
-    auto compute_target_distance = [this]{
+    auto compute_target_distance = [this] {
         float dx = m_target_x - m_pose->x;
         float dy = m_target_y - m_pose->y;
-        return sqrt(dx*dx + dy*dy);
+        return sqrt(dx * dx + dy * dy);
     };
 
-    if(compute_target_distance() <= m_tolerance){
+    if (compute_target_distance() <= m_tolerance) {
         reset_target();
     }
 }
 
-void GameMaster::kill_target_impl(){
+bool GameMaster::kill_target_impl()
+{
     auto client = create_client<turtlesim::srv::Kill>("kill");
 
-    while(client->wait_for_service(std::chrono::seconds(1)) == false){
+    while (client->wait_for_service(std::chrono::seconds(1)) == false) {
         RCLCPP_WARN(get_logger(), "waiting for server ...");
     }
 
@@ -66,19 +65,23 @@ void GameMaster::kill_target_impl(){
     try {
         auto response = future.get();
         RCLCPP_INFO(get_logger(), "target killed.");
-    } catch(const std::exception &e){
+
+        return spawn_target_impl();
+    } catch (const std::exception& e) {
         RCLCPP_ERROR(get_logger(), "kill_target_impl: %s", e.what());
+        return false;
     }
 }
 
-bool GameMaster::spawn_target_impl(){
+bool GameMaster::spawn_target_impl()
+{
     auto client = create_client<turtlesim::srv::Spawn>("spawn");
 
-    while(client->wait_for_service(std::chrono::seconds(1)) == false){
+    while (client->wait_for_service(std::chrono::seconds(1)) == false) {
         RCLCPP_WARN(get_logger(), "waiting for server ...");
     }
 
-    auto generate_random = [this](float min, float max){
+    auto generate_random = [this](float min, float max) {
         std::uniform_real_distribution<double> distribution(min, max);
         return distribution(m_random_generator);
     };
@@ -95,23 +98,24 @@ bool GameMaster::spawn_target_impl(){
     auto future = client->async_send_request(request);
     try {
         auto response = future.get();
-        if(response->name != "target"){
+        if (response->name != "target") {
             RCLCPP_WARN(get_logger(), "unable to spawn target.");
             return false;
         } else {
             RCLCPP_INFO(get_logger(), "target spawned: (%f; %f).", m_target_x, m_target_y);
-            return true;
+            return send_target_position_impl();
         }
-    } catch(const std::exception &e){
+    } catch (const std::exception& e) {
         RCLCPP_ERROR(get_logger(), "spawn_target_impl: %s", e.what());
         return false;
     }
 }
 
-void GameMaster::send_target_position_impl(){
+bool GameMaster::send_target_position_impl()
+{
     auto client = create_client<turtle_catcher::srv::TargetPosition>("target_position");
 
-    while(client->wait_for_service(std::chrono::seconds(1)) == false){
+    while (client->wait_for_service(std::chrono::seconds(1)) == false) {
         RCLCPP_WARN(get_logger(), "waiting for server ...");
     }
 
@@ -123,11 +127,14 @@ void GameMaster::send_target_position_impl(){
     try {
         auto response = future.get();
         RCLCPP_INFO(get_logger(), "target position sent: (%f; %f).", m_target_x, m_target_y);
-    } catch(const std::exception &e){
+        return true;
+    } catch (const std::exception& e) {
         RCLCPP_ERROR(get_logger(), "send_target_position_impl: %s", e.what());
+        return false;
     }
 }
 
-void GameMaster::subscribe_pose(const turtlesim::msg::Pose::SharedPtr pose){
+void GameMaster::subscribe_pose(const turtlesim::msg::Pose::SharedPtr pose)
+{
     m_pose = pose;
 }
