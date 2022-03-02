@@ -45,7 +45,11 @@ private:
         image->header.frame_id = "camera";
         image->header.stamp = now();
         m_publisher->publish(*image);
-        m_counter = ++m_counter % m_images.size();
+
+        ++m_counter;
+        if (m_counter >= m_images.size()) {
+            m_counter = 0;
+        }
     }
 
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr m_publisher;
