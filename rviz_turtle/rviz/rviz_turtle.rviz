@@ -6,7 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /Odometry1
+        - /Grid1/Offset1
       Splitter Ratio: 0.5
     Tree Height: 548
   - Class: rviz_common/Selection
@@ -36,12 +36,12 @@ Visualization Manager:
       Name: Grid
       Normal Cell Count: 0
       Offset:
-        X: 0
-        Y: 0
+        X: 5.539999961853027
+        Y: 5.539999961853027
         Z: 0
       Plane: XY
-      Plane Cell Count: 10
-      Reference Frame: <Fixed Frame>
+      Plane Cell Count: 35
+      Reference Frame: world
       Value: true
     - Angle Tolerance: 0.10000000149011612
       Class: rviz_default_plugins/Odometry
@@ -84,7 +84,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: odom
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -124,7 +124,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 12.453737258911133
+      Distance: 45.12522888183594
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -139,10 +139,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7708752155303955
+      Pitch: 1.0358750820159912
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.723711013793945
+      Yaw: 4.738711357116699
     Saved: ~
 Window Geometry:
   Displays:
