@@ -32,7 +32,7 @@ install(TARGETS
 )
 
 install(DIRECTORY
-  launch rviz
+  launch rviz urdf
   DESTINATION share/${PROJECT_NAME}
 )
 

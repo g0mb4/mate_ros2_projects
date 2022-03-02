@@ -44,14 +44,14 @@ private:
 
         m_odom_publisher->publish(odom_msg);
 
-        // world -> map, world = map
+        // world -> map, map = world
         map_transform.header.stamp = now();
         map_transform.header.frame_id = "world";
         map_transform.child_frame_id = "map";
 
         m_tf_broadcaster->sendTransform(map_transform);
 
-        // map -> odom, map = odom
+        // map -> odom, odom = map
         odom_transform.header.stamp = now();
         odom_transform.header.frame_id = "map";
         odom_transform.child_frame_id = "odom";
@@ -65,7 +65,7 @@ private:
 
         base_link_transform.transform.translation.x = msg->x;
         base_link_transform.transform.translation.y = msg->y;
-        base_link_transform.transform.translation.z = 0.0;
+        base_link_transform.transform.translation.z = 0.15;
 
         base_link_transform.transform.rotation.x = orientation.x();
         base_link_transform.transform.rotation.y = orientation.y();

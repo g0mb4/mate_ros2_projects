@@ -5,9 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /TF1
-        - /RobotModel1
+        - /RobotModel1/Description Topic1
       Splitter Ratio: 0.5
     Tree Height: 548
   - Class: rviz_common/Selection
@@ -33,9 +31,13 @@ Visualization Manager:
         All Enabled: true
         base_link:
           Value: true
+        left_wheel:
+          Value: true
         map:
           Value: true
         odom:
+          Value: true
+        right_wheel:
           Value: true
         world:
           Value: true
@@ -49,7 +51,10 @@ Visualization Manager:
           map:
             odom:
               base_link:
-                {}
+                left_wheel:
+                  {}
+                right_wheel:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 0.5
@@ -74,13 +79,13 @@ Visualization Manager:
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
       Description File: /home/gmb/ros2_ws/src/mate_projects/rviz_turtle/rviz/robot.urdf
-      Description Source: File
+      Description Source: Topic
       Description Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: ""
+        Value: /robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -89,6 +94,16 @@ Visualization Manager:
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
         base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -141,25 +156,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 14.16746997833252
+      Distance: 1.5672783851623535
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 6.151353359222412
-        Y: 2.5436739921569824
-        Z: 1.0315988063812256
+        X: 6.116927623748779
+        Y: 2.307891368865967
+        Z: 0.846915066242218
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.9058761596679688
+      Pitch: 0.4458768963813782
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.718753337860107
+      Yaw: 4.768756866455078
     Saved: ~
 Window Geometry:
   Displays:
@@ -175,5 +190,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1375
-  X: 2433
-  Y: 165
+  X: 2290
+  Y: 259
