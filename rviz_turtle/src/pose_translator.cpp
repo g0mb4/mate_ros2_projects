@@ -21,7 +21,9 @@ public:
 private:
     void subscribe_pose(const turtlesim::msg::Pose::SharedPtr msg)
     {
-        geometry_msgs::msg::TransformStamped t;
+        geometry_msgs::msg::TransformStamped map_transform;
+        geometry_msgs::msg::TransformStamped odom_transform;
+        geometry_msgs::msg::TransformStamped base_link_transform;
         tf2::Quaternion orientation;
         orientation.setRPY(0, 0, msg->theta);
 
@@ -42,20 +44,35 @@ private:
 
         m_odom_publisher->publish(odom_msg);
 
-        t.header.stamp = now();
-        t.header.frame_id = "world";
-        t.child_frame_id = "odom";
+        // world -> map, world = map
+        map_transform.header.stamp = now();
+        map_transform.header.frame_id = "world";
+        map_transform.child_frame_id = "map";
 
-        t.transform.translation.x = msg->x;
-        t.transform.translation.y = msg->y;
-        t.transform.translation.z = 0.0;
+        m_tf_broadcaster->sendTransform(map_transform);
 
-        t.transform.rotation.x = orientation.x();
-        t.transform.rotation.y = orientation.y();
-        t.transform.rotation.z = orientation.z();
-        t.transform.rotation.w = orientation.w();
+        // map -> odom, map = odom
+        odom_transform.header.stamp = now();
+        odom_transform.header.frame_id = "map";
+        odom_transform.child_frame_id = "odom";
 
-        m_tf_broadcaster->sendTransform(t);
+        m_tf_broadcaster->sendTransform(odom_transform);
+
+        // odom -> base_link
+        base_link_transform.header.stamp = now();
+        base_link_transform.header.frame_id = "odom";
+        base_link_transform.child_frame_id = "base_link";
+
+        base_link_transform.transform.translation.x = msg->x;
+        base_link_transform.transform.translation.y = msg->y;
+        base_link_transform.transform.translation.z = 0.0;
+
+        base_link_transform.transform.rotation.x = orientation.x();
+        base_link_transform.transform.rotation.y = orientation.y();
+        base_link_transform.transform.rotation.z = orientation.z();
+        base_link_transform.transform.rotation.w = orientation.w();
+
+        m_tf_broadcaster->sendTransform(base_link_transform);
     }
 
     rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr m_pose_subscriber;
