@@ -16,9 +16,9 @@ public:
 private:
     void control_loop_tick();
 
-    bool kill_target_impl();
-    bool spawn_target_impl();
-    bool send_target_position_impl();
+    bool kill_spawn_send_position();
+    bool spawn_send_position();
+    bool send_position();
 
     void subscribe_pose(const turtlesim::msg::Pose::SharedPtr);
 

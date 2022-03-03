@@ -12,6 +12,7 @@ GameMaster::GameMaster()
         std::bind(&GameMaster::subscribe_pose,
             this, std::placeholders::_1));
 
+    // tick-rate = 30 Hz -> 1s / 30 ~= 33 ms
     m_control_loop_timer = create_wall_timer(std::chrono::milliseconds(33),
         std::bind(&GameMaster::control_loop_tick, this));
 
@@ -24,7 +25,7 @@ void GameMaster::reset_target()
     auto thread = std::make_unique<std::thread>(
         [this] {
             while (1) {
-                if (kill_target_impl()) {
+                if (kill_spawn_send_position()) {
                     break;
                 }
             }
@@ -50,7 +51,7 @@ void GameMaster::control_loop_tick()
     }
 }
 
-bool GameMaster::kill_target_impl()
+bool GameMaster::kill_spawn_send_position()
 {
     auto client = create_client<turtlesim::srv::Kill>("kill");
 
@@ -66,14 +67,14 @@ bool GameMaster::kill_target_impl()
         auto response = future.get();
         RCLCPP_INFO(get_logger(), "target killed.");
 
-        return spawn_target_impl();
+        return spawn_send_position();
     } catch (const std::exception& e) {
         RCLCPP_ERROR(get_logger(), "kill_target_impl: %s", e.what());
         return false;
     }
 }
 
-bool GameMaster::spawn_target_impl()
+bool GameMaster::spawn_send_position()
 {
     auto client = create_client<turtlesim::srv::Spawn>("spawn");
 
@@ -103,7 +104,7 @@ bool GameMaster::spawn_target_impl()
             return false;
         } else {
             RCLCPP_INFO(get_logger(), "target spawned: (%f; %f).", m_target_x, m_target_y);
-            return send_target_position_impl();
+            return send_position();
         }
     } catch (const std::exception& e) {
         RCLCPP_ERROR(get_logger(), "spawn_target_impl: %s", e.what());
@@ -111,7 +112,7 @@ bool GameMaster::spawn_target_impl()
     }
 }
 
-bool GameMaster::send_target_position_impl()
+bool GameMaster::send_position()
 {
     auto client = create_client<turtle_catcher::srv::TargetPosition>("target_position");
 
