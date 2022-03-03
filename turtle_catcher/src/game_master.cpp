@@ -24,11 +24,10 @@ void GameMaster::reset_target()
 {
     auto thread = std::make_unique<std::thread>(
         [this] {
-            while (1) {
-                if (kill_spawn_send_position()) {
-                    break;
-                }
-            }
+            bool ok = false;
+            do {
+                ok = kill_spawn_send_position();
+            } while (!ok);
         });
 
     thread->detach();
