@@ -21,6 +21,8 @@ public:
     }
 
 private:
+    static constexpr double BASE_LINK_HEIGHT = 0.15;
+
     void subscribe_pose_publish_odom_tf(const turtlesim::msg::Pose::SharedPtr msg)
     {
         geometry_msgs::msg::TransformStamped map_transform;
@@ -67,7 +69,7 @@ private:
 
         base_link_transform.transform.translation.x = msg->x;
         base_link_transform.transform.translation.y = msg->y;
-        base_link_transform.transform.translation.z = 0.15;
+        base_link_transform.transform.translation.z = BASE_LINK_HEIGHT;
 
         base_link_transform.transform.rotation.x = orientation.x();
         base_link_transform.transform.rotation.y = orientation.y();
