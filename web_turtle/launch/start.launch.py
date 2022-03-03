@@ -10,6 +10,12 @@ from launch_ros.actions import Node
 def generate_launch_description():
     ld = LaunchDescription()
 
+    rosbridgeSharedDir = get_package_share_directory('rosbridge_server')
+    rosbridgeLaunchFile = os.path.join(rosbridgeSharedDir, 'launch/rosbridge_websocket_launch.xml')
+
+    webServerSharedDir = get_package_share_directory('web_turtle')
+    webServerScriptFile = os.path.join(webServerSharedDir, 'scripts/server.py')
+
     ld.add_action(
         Node(
             package="turtlesim",
@@ -20,24 +26,14 @@ def generate_launch_description():
     ld.add_action(
         IncludeLaunchDescription(
             AnyLaunchDescriptionSource(
-                os.path.join(
-                    get_package_share_directory('rosbridge_server'),
-                    'launch/rosbridge_websocket_launch.xml'
-                    )
-                )
-        ) 
+                rosbridgeLaunchFile
+            )
+        )
     )
 
     ld.add_action(
         ExecuteProcess(
-            cmd=[
-                'python3',
-                '-u',
-                os.path.join(
-                        get_package_share_directory('web_turtle'),
-                        'scripts/server.py'
-                    )
-            ],
+            cmd=['python3', '-u', webServerScriptFile],
             name='webserver',
             output='screen'
         )

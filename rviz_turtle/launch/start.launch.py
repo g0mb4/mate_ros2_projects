@@ -7,10 +7,10 @@ from launch_ros.actions import Node
 def generate_launch_description():
     ld = LaunchDescription()
 
-    urdf = os.path.join(get_package_share_directory('rviz_turtle'), 'urdf/robot.urdf')
-    rvizConf = os.path.join(get_package_share_directory('rviz_turtle'), 'rviz/rviz_turtle.rviz')
+    urdfFile = os.path.join(get_package_share_directory('rviz_turtle'), 'urdf/robot.urdf')
+    rvizConfigFile = os.path.join(get_package_share_directory('rviz_turtle'), 'rviz/rviz_turtle.rviz')
 
-    with open(urdf, 'r') as f:
+    with open(urdfFile, 'r') as f:
         robot_desc = f.read()
 
     ld.add_action(Node(
@@ -30,17 +30,14 @@ def generate_launch_description():
         parameters=[
             {'robot_description': robot_desc}
         ],
-        arguments=[urdf]
+        arguments=[urdfFile]
     ))
 
     ld.add_action(Node(
         package="rviz2",
         executable="rviz2",
         output='screen',
-        arguments=[
-            '-d', 
-            rvizConf
-        ]
+        arguments=['-d', rvizConfigFile]
     ))
 
     return ld
