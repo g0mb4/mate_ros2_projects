@@ -16,6 +16,8 @@ public:
 
         m_odom_publisher = create_publisher<nav_msgs::msg::Odometry>("/odom", 50);
         m_tf_broadcaster = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
+
+        RCLCPP_INFO(get_logger(), "started");
     }
 
 private:
