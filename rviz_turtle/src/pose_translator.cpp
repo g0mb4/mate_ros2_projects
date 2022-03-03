@@ -12,7 +12,7 @@ public:
         m_pose_subscriber = create_subscription<turtlesim::msg::Pose>(
             "/turtle1/pose",
             10,
-            std::bind(&PoseTranslatorNode::subscribe_pose, this, std::placeholders::_1));
+            std::bind(&PoseTranslatorNode::subscribe_pose_publish_odom_tf, this, std::placeholders::_1));
 
         m_odom_publisher = create_publisher<nav_msgs::msg::Odometry>("/odom", 50);
         m_tf_broadcaster = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
@@ -21,7 +21,7 @@ public:
     }
 
 private:
-    void subscribe_pose(const turtlesim::msg::Pose::SharedPtr msg)
+    void subscribe_pose_publish_odom_tf(const turtlesim::msg::Pose::SharedPtr msg)
     {
         geometry_msgs::msg::TransformStamped map_transform;
         geometry_msgs::msg::TransformStamped odom_transform;
