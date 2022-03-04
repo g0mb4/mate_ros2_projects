@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.6">
+	<world name="default">
+		<include>
+			<uri>model://ground_plane</uri>
+		</include>
+		<include>
+			<uri>model://sun</uri>
+		</include>
+		<include>
+			<uri>model://robot</uri>
+		</include>
+		<include>
+			<uri>model://lidar</uri>
+			<pose>0 0 1.5 0 0 0</pose>
+		</include>
+		<model name="cylinder">
+			<static>true</static>
+			<pose>2 0 0 0 0 0</pose>
+			<link name="cylinder_link">
+				<collision name="cylinder_collision">
+					<geometry>
+						<cylinder>
+							<radius>0.25</radius>
+							<length>3</length>
+						</cylinder>
+					</geometry>
+				</collision>
+				<visual name="cylinder_visual">
+					<geometry>
+						<cylinder>
+							<radius>0.25</radius>
+							<length>3</length>
+						</cylinder>
+					</geometry>
+				</visual>
+			</link>
+		</model>
+	</world>
+</sdf>
