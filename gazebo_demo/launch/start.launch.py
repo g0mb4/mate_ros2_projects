@@ -1,3 +1,5 @@
+# based on: https://automaticaddison.com/set-up-lidar-for-a-simulated-mobile-robot-in-ros-2/
+
 import os
 
 from ament_index_python import get_package_share_directory
