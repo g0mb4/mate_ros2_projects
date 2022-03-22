@@ -18,6 +18,8 @@ source ~/.bashrc
 
 ## dummy_camera
 
+![dummy_camera](img/dummy_camera.png)
+
 A virtual camera that can output PNG images into the ROS network emulating a real camera.
 
 ### qucikstart
@@ -42,6 +44,8 @@ sudo apt install -y locate libpng12-0 libjasper1 libjasper-dev
 
 ## turtle_catcher
 
+![turtle_catcher](img/turtle_catcher.png)
+
 A position control demonstartion using turtlesim. The *game_master* will spawn a target turtle at random position and the *turtle1_controller* drives the turtle to reach the target.
 
 ### qucikstart
@@ -55,6 +59,8 @@ ros2 launch turtle_catcher start.launch.py
 + chaining async service calls
 
 ## qt_turtle
+
+![qt_turtle](img/qt_turtle.png)
 
 Qt5 integration demo, it will show the position of the turtle.
 
@@ -73,6 +79,8 @@ sudo apt install -y qt5-default qtcreator
 + Qt5 framework
 
 ## web_turtle
+
+![web_turtle](img/web_turtle.png)
 
 Browser (JavaScript) integration demo, it will start a webserver and allows the user to drive the turtle using a browser.
 
@@ -97,6 +105,8 @@ colcon build
 
 ## rviz_turtle
 
+![rviz_turtle](img/rviz_turtle.png)
+
 Rviz 3D visualization tool demonstration, shows a simple URDF model of the turtle in Rviz.
 
 ### qucikstart
@@ -112,6 +122,8 @@ ros2 launch rviz_turtle start.launch.py
 + TF tree
 
 ## gazebo_demo
+
+![gazebo_demo](img/gazebo_demo.png)
 
 gazebo simulation demo using an SDF model differential drive robot with a lidar, it will start the gazebo simulator and the Rviz tool.
 
