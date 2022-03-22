@@ -96,6 +96,7 @@ cd ros2_ws/src
 git clone https://github.com/RobotWebTools/rosbridge_suite.git
 cd ..
 colcon build
+source ~/.bashrc
 ```
 
 ### new topics
