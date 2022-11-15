@@ -13,23 +13,17 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(turtlesim REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
+find_package(turtle_catcher_interfaces REQUIRED)
 
 include_directories(
   include
 )
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  srv/TargetPosition.srv
-)
-
 add_executable(turtle1_controller src/turtle1_controller_node.cpp src/turtle1_controller.cpp)
-ament_target_dependencies(turtle1_controller rclcpp turtlesim geometry_msgs)
-rosidl_target_interfaces(turtle1_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
+ament_target_dependencies(turtle1_controller rclcpp turtlesim geometry_msgs turtle_catcher_interfaces)
 
 add_executable(game_master src/game_master_node.cpp src/game_master.cpp)
-ament_target_dependencies(game_master rclcpp turtlesim geometry_msgs)
-rosidl_target_interfaces(game_master ${PROJECT_NAME} "rosidl_typesupport_cpp")
+ament_target_dependencies(game_master rclcpp turtlesim geometry_msgs turtle_catcher_interfaces)
 
 install(TARGETS
   turtle1_controller

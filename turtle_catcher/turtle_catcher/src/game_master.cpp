@@ -113,13 +113,13 @@ bool GameMaster::spawn_send_position()
 
 bool GameMaster::send_position()
 {
-    auto client = create_client<turtle_catcher::srv::TargetPosition>("target_position");
+    auto client = create_client<turtle_catcher_interfaces::srv::TargetPosition>("target_position");
 
     while (client->wait_for_service(std::chrono::seconds(1)) == false) {
         RCLCPP_WARN(get_logger(), "waiting for server ...");
     }
 
-    auto request = std::make_shared<turtle_catcher::srv::TargetPosition::Request>();
+    auto request = std::make_shared<turtle_catcher_interfaces::srv::TargetPosition::Request>();
     request->x = m_target_x;
     request->y = m_target_y;
 

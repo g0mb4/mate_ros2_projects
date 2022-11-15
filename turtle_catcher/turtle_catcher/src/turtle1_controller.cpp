@@ -19,7 +19,7 @@ Turtle1Controller::Turtle1Controller()
     m_cmd_vel_publisher = create_publisher<geometry_msgs::msg::Twist>(
         "turtle1/cmd_vel", 10);
 
-    m_target_position_server = create_service<turtle_catcher::srv::TargetPosition>(
+    m_target_position_server = create_service<turtle_catcher_interfaces::srv::TargetPosition>(
         "target_position",
         std::bind(
             &Turtle1Controller::serve_target_position, this,
@@ -81,10 +81,9 @@ void Turtle1Controller::subscribe_pose(const turtlesim::msg::Pose::SharedPtr pos
 }
 
 void Turtle1Controller::serve_target_position(
-    const turtle_catcher::srv::TargetPosition::Request::SharedPtr request,
-    const turtle_catcher::srv::TargetPosition::Response::SharedPtr)
+    const turtle_catcher_interfaces::srv::TargetPosition::Request::SharedPtr request,
+    const turtle_catcher_interfaces::srv::TargetPosition::Response::SharedPtr)
 {
-
     m_target_x = request->x;
     m_target_y = request->y;
 

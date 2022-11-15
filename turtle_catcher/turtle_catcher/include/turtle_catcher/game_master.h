@@ -2,7 +2,7 @@
 
 #include <random>
 #include <rclcpp/rclcpp.hpp>
-#include <turtle_catcher/srv/target_position.hpp>
+#include <turtle_catcher_interfaces/srv/target_position.hpp>
 #include <turtlesim/msg/pose.hpp>
 #include <turtlesim/srv/kill.hpp>
 #include <turtlesim/srv/spawn.hpp>
