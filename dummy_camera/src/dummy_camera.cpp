@@ -3,14 +3,15 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
 
-using list = std::vector<std::string>;
+using Image = sensor_msgs::msg::Image;
+using List = std::vector<std::string>;
 
 class DummyCameraNode : public rclcpp::Node {
 public:
     DummyCameraNode()
         : rclcpp::Node("dummy_camera")
     {
-        declare_parameter<list>("files", list());
+        declare_parameter<List>("files", List());
         declare_parameter<int64_t>("fps", 30);
 
         int64_t fps = get_parameter("fps").as_int();
@@ -33,7 +34,7 @@ public:
             exit(1);
         }
 
-        m_publisher = create_publisher<sensor_msgs::msg::Image>("/image", 1);
+        m_publisher = create_publisher<Image>("/image", 1);
         m_timer = create_wall_timer(std::chrono::milliseconds(frequency),
             std::bind(&DummyCameraNode::publish_image, this));
 
@@ -43,7 +44,9 @@ public:
 private:
     void publish_image()
     {
-        auto image = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", m_images[m_counter]).toImageMsg();
+        auto image = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8",
+            m_images[m_counter])
+                         .toImageMsg();
         image->header.frame_id = "camera";
         image->header.stamp = now();
         m_publisher->publish(*image);
@@ -54,7 +57,7 @@ private:
         }
     }
 
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr m_publisher;
+    rclcpp::Publisher<Image>::SharedPtr m_publisher;
     rclcpp::TimerBase::SharedPtr m_timer;
     std::vector<cv::Mat> m_images;
     uint32_t m_counter { 0 };

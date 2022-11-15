@@ -68,7 +68,7 @@ bool GameMaster::kill_spawn_send_position()
 
         return spawn_send_position();
     } catch (const std::exception& e) {
-        RCLCPP_ERROR(get_logger(), "kill_target_impl: %s", e.what());
+        RCLCPP_ERROR(get_logger(), "kill_spawn_send_position: %s", e.what());
         return false;
     }
 }
@@ -106,20 +106,20 @@ bool GameMaster::spawn_send_position()
             return send_position();
         }
     } catch (const std::exception& e) {
-        RCLCPP_ERROR(get_logger(), "spawn_target_impl: %s", e.what());
+        RCLCPP_ERROR(get_logger(), "spawn_send_position: %s", e.what());
         return false;
     }
 }
 
 bool GameMaster::send_position()
 {
-    auto client = create_client<turtle_catcher_interfaces::srv::TargetPosition>("target_position");
+    auto client = create_client<TargetPosition>("target_position");
 
     while (client->wait_for_service(std::chrono::seconds(1)) == false) {
         RCLCPP_WARN(get_logger(), "waiting for server ...");
     }
 
-    auto request = std::make_shared<turtle_catcher_interfaces::srv::TargetPosition::Request>();
+    auto request = std::make_shared<TargetPosition::Request>();
     request->x = m_target_x;
     request->y = m_target_y;
 
@@ -129,7 +129,7 @@ bool GameMaster::send_position()
         RCLCPP_INFO(get_logger(), "target position sent: (%f; %f).", m_target_x, m_target_y);
         return true;
     } catch (const std::exception& e) {
-        RCLCPP_ERROR(get_logger(), "send_target_position_impl: %s", e.what());
+        RCLCPP_ERROR(get_logger(), "send_position: %s", e.what());
         return false;
     }
 }

@@ -7,6 +7,8 @@
 #include <turtlesim/srv/kill.hpp>
 #include <turtlesim/srv/spawn.hpp>
 
+using TargetPosition = turtle_catcher_interfaces::srv::TargetPosition;
+
 class GameMaster : public rclcpp::Node {
 public:
     GameMaster();
