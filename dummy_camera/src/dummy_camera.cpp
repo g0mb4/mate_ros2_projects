@@ -3,12 +3,14 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
 
+using list = std::vector<std::string>;
+
 class DummyCameraNode : public rclcpp::Node {
 public:
     DummyCameraNode()
         : rclcpp::Node("dummy_camera")
     {
-        declare_parameter<std::vector<std::string>>("files", {});
+        declare_parameter<list>("files", list());
         declare_parameter<int64_t>("fps", 30);
 
         int64_t fps = get_parameter("fps").as_int();
