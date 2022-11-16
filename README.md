@@ -4,7 +4,7 @@ ROS2 projects.
 
 ## install
 
-The assumbed operating system is Ubuntu 20.04. The required packages are the extra packages besides the ```ros-foxy-desktop``` version.
+The assumbed operating system is Ubuntu 22.04. The required packages are the extra packages besides the ```ros-humble-desktop``` version.
 
 Assuming the ROS2 workspace is ```~/ros2_ws``` and the ```~/ros2_ws/install/local_setup.bash``` is set up (sourced) in the ```~/.bashrc```,
 the package can be downloaded and installed by:
@@ -55,7 +55,6 @@ ros2 launch turtle_catcher start.launch.py
 
 ### new topics
 + position control
-+ intarface within a package
 + chaining async service calls
 
 ## qt_turtle
@@ -136,7 +135,7 @@ ros2 launch gazebo_demo start.launch.py
 ### dependencies
 ```
 sudo apt update
-sudo apt install ros-foxy-gazebo-ros-pkgs
+sudo apt install ros-humble-gazebo-ros-pkgs
 ```
 
 ### new topics
