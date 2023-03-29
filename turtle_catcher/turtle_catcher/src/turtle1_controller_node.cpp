@@ -1,4 +1,4 @@
-#include <turtle_catcher/turtle1_controller.h>
+#include <turtle_catcher/turtle1_controller.hpp>
 
 int main(int argc, char** argv)
 {

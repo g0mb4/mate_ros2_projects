@@ -1,4 +1,4 @@
-#include <turtle_catcher/game_master.h>
+#include <turtle_catcher/game_master.hpp>
 
 GameMaster::GameMaster()
     : rclcpp::Node("game_master")
